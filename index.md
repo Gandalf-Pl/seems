@@ -7,4 +7,8 @@ title: My blog
 
 * my latest blog
 
+{% for post in site.posts %}
 
+*   {{ post.data | date_to_string }}  [{{ post.title }}]({{ site.baseurl }}{{ post.url }})
+
+{% endfor %}
