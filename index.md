@@ -2,5 +2,7 @@
 layout: default
 title: 我的Blog
 ---
-<h2>{{ page.title }}</h2>
 
+## {{ page.title }}
+
+* my latest blogs
