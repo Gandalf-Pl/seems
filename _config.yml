@@ -1,1 +1,3 @@
 baseurl: /seems
+markdown: rdiscount
+pygments: true
