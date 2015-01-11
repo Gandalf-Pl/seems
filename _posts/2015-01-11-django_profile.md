@@ -7,6 +7,9 @@ title: Django性能调优
 
 **Django QuerySet**
     * QuerySet的特性
+        1. QuerySet是惰性的
+        2. QuerySet在什么时候赋值
+        3. QuerySet的值是如何保存在内存中的
     
 **Django数据库查询优化**
     * 连接数
