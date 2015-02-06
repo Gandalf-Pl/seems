@@ -1,5 +1,5 @@
 baseurl: /seems
 markdown: rdiscount
-pygments: true
+highlighter: pygments
 paginate: 10
 paginate_path: "blog/page:num/"
