@@ -22,6 +22,9 @@ def insert_sort_by_recusive(seq, i):
 def insert_sort_by_loop(seq):
     """
     通过对列表进行循环，进行列表的排序
+    插入排序，默认第一个元素是排序Ok的，
+    取出下一个元素，在已经排序的元素列表中从后往前扫描
+    如果该元素大于新元素，则将元素移到下一个位置
     """
     if len(seq) <= 1: return seq
 
@@ -35,7 +38,7 @@ def insert_sort_by_loop(seq):
 
 if __name__ == "__main__":
     seq = input("please input a seq: ")
-    i = len(seq)
+    i = len(seq) - 1
 
     x1 = time.time()
     print insert_sort_by_recusive(seq, i)
