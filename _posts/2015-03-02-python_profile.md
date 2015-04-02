@@ -8,6 +8,7 @@ title: Python性能相关的Tips
    python的List不是一个单向列表或者一个双向列表,而是一个Array,存储在连续的内存块中.
    因此python中使用append和insert进行列表操作的效率不同,append的时间复杂度是O(1),
    而insert的时间复杂度是O(len(list)),也就是O(n).
+   
    *code example:*
     
     
