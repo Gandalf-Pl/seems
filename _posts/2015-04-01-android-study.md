@@ -184,5 +184,127 @@ Activity的生存期
 
 **控件和布局的继承结构**
 
+一些其他的属性：
+
+    + android:background 
+
+        用于为布局或控件指定一个背景，可以使用颜色或图片来进行填充。
+
+    + android:layout_margin
+        
+        这个属性，它可以指定控件在上下左右方向上偏移的距离.
+
+    + android:layout_marginLeft
+        
+    + android:layout_marginTop
+
+        这几个属性可以用来单独指定控件在某个方向上的偏移的距离。
+
+通过include可以非常方便的引用一个布局，同时解决了重复编写布局代码的问
+题，但是如果布局中有一些控件要求能够响应时间，我们还是需要在每个活动
+中为这些控件单独编写一次时间注册的代码。
+
+**最常用的控件ListView**
+
+ListView允许用户通过手指上下华东的方式将屏幕外的数据滚动到屏幕内，
+同时屏幕上原有的数据则会滚出屏幕.
+
+数组的数据是无法直接出传递给ListView的，我们还需要借助适配器来完成。
+android提供了很多适配器的实现类，ArrayAdapter可以通过泛型来指定要
+适配的数据类型，然后在构造函数中把要适配的数据传入即可。
+
+android.R.layout.simple_list_item_1是一个android的内置的布局文件，
+里面只有一个TextView，可以用于显示一段文本。
+
+Android中的单位和尺寸
+
++ px 
+
+    pｘ是像素的意思，即屏幕中可以显示的最小元素单元。
+
++ pt
+    
+    pt是磅数的意思，１磅== 1/72英寸。
+
++ dp
+    
+    dp 也是dip，是密度无关像素的意思。它在不同密度的屏幕中的显示比例
+    将保持一致。
+
++ sp
+
+    sp是可伸缩像素的意思。
+
+**碎片和活动之间进行通信**
+
+为了方便碎片和活动之间进行通信，FragmentManager提供了一个类似于
+findViewById()的方法专门用于从布局文件中获取碎片的实例。
+
+*example code:*
+
+    RightFragment RightFragment = (Rightfragment) getFragmentManger().findFragmentById(R.id.right_fragment);
+
+通过调用FragmentManager的findFragmentById()方法，可以在活动中得到相应
+碎片的实例，然后就能轻松的调用碎片李宓的方法。
+
+碎片(Frag)中如何调用活动里的方法，在每个碎片中都可以通过调用
+getActivity()方法来得到和当前碎片相关联的活动实例
+
+*example code:*
+
+    MainActivity activity = (MainActivity) getActivity();
+
+有了活动实例之后，在碎片中调用活动里的方法就变得轻而易举。另外当碎片中
+需要使用Context对象的时候，也可以使用getActivity()方法，因为获取到
+的活动本身就是一个Context对象了。
+
+**碎片的生命周期(Fragment)**
+
+1. 运行状态
+    
+    当一个碎片是可见的，并且它所关联的活动正处于运行状态时，该碎片也
+    处于运行状态。
+
+2. 暂停状态
+
+    当一个活动进入暂停状态，与它相关联的可见碎片就会进入到暂停状态
+
+3. 停止状态
+
+    当一个活动进入停止状态时，与它相关联的碎片就会进入到停止状态，
+    或者通过调用FragmentTransaction的remove(), replace()方法将碎片从
+    活动中移出，但有在事务提交前调用addToBackStack()方法，此时碎片也进入
+    到暂停状态。
+
+4. 销毁状态
+
+    碎片总是依附于活动而存在的,因此当活动被销毁时,与它相关联的碎片就会进入
+    到销毁状态。或者通过调用 FragmentTransaction 的 remove()、replace()方法将碎片从活
+    动中移除,但在事务提交之前并没有调用 addToBackStack()方法,这时的碎片也会进入
+    到销毁状态。
+
+**活动中有的回调方法,碎片中几乎都有,不过碎片还提供了一些附加的回调方法**
+
+1. onAttach()
+    
+    当碎片和活动建立关联的时候调用。
+
+2. onCreateView()
+
+    为碎片创建视图(加载布局)时调用。
+
+3. onActivityCreated()
+
+    确保与碎片相关联的活动一定已经创建完毕的时候调用。
+
+4. onDestroyView()
+
+    当与碎片关联的视图被移除的时候调用。
+
+5. onDetach()
+
+    当碎片和活动解除关联的时候调用.
+
+
 ![控件和布局的继承结构](../images/view&viewgroup.png)
 
