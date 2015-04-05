@@ -305,6 +305,73 @@ getActivity()方法来得到和当前碎片相关联的活动实例
 
     当碎片和活动解除关联的时候调用.
 
+**广播机制简介**
+
++ 标准广播
+
+    标准广播是一种完全异步执行的广播，在广播发出去之后，所有的广播接收器
+    几乎都会在同一时刻接收到这条广播消息，因此它们之间没有任何先后顺序
+
+    这种广播效率比较高，但是也意味着它是无法被截断的。
+
++ 有序广播
+
+    有序广播式一种同步执行的广播，在广播发出之后，则同一时刻只有一个广播
+    接收器能够收到这条广播消息，当这个广播接收器中的逻辑执行完毕后，广播
+    才会继续传递。
+
+广播注册方式：
+
+1. 动态注册
+
+    在代码中注册
+
+2. 静态注册
+
+    在AndroidManifest.xml中对广播接收器进行注册。
+
+文件存储：
+
+    其实所用到的核心技术就是 Context
+    类中提供的 openFileInput()和 openFileOutput()方法,之后就是利用 Java 的各种流来进行读写
+    操作就可以了。
+
+将数据存储到 SharedPreferences :
+
+    要想使用 SharedPreferences 来存储数据,首先需要获取到 SharedPreferences 对象。 Android
+    中主要提供了三种方法用于得到 SharedPreferences 对象。
+
+    1. Context 类中的 getSharedPreferences()方法
+        
+        此方法接收两个参数,第一个参数用于指定 SharedPreferences 文件的名称,如果指
+        定的文件不存在则会创建一个,SharedPreferences 文件都是存放在/data/data/<package
+        name>/shared_prefs/目录下的。第二个参数用于指定操作模式,主要有两种模式可以选
+        择,MODE_PRIVATE 和 MODE_MULTI_PROCESS。MODE_PRIVATE 仍然是默认的操
+        作模式,和直接传入 0 效果是相同的,表示只有当前的应用程序才可以对这个
+        SharedPreferences 文件进行读写。 MODE_MULTI_PROCESS 则一般是用于会有多个进程中
+        对同一个 SharedPreferences 文件进行读写的情况。
+
+    2. Activity 类中的 getPreferences()
+
+        这个方法和 Context 中的 getSharedPreferences()方法很相似,不过它只接收一个操
+        作模式参数,因为使用这个方法时会自动将当前活动的类名作为 SharedPreferences 的文
+        件名。
+
+    3. PreferenceManager 类中的 getDefaultSharedPreferences()方法
+
+        这是一个静态方法,它接收一个 Context 参数,并自动使用当前应用程序的包名作
+        为前缀来命名 SharedPreferences 文件。
+
+得到了 SharedPreferences 对象之后,就可以开始向 SharedPreferences 文件中存储数据了,
+主要可以分为三步实现。
+
+1. 调用 SharedPreferences 对象的 edit()方法来获取一个 SharedPreferences.Editor 对象。
+2. 向 SharedPreferences.Editor 对象 中添 加数 据, 比如 添加一 个布 尔型 数据 就使 用
+putBoolean 方法,添加一个字符串则使用 putString()方法,以此类推。
+3. 调用 commit()方法将添加的数据提交,从而完成数据存储操作。
+
+
+
 
 ![控件和布局的继承结构](../images/view&viewgroup.png)
 
