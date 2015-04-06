@@ -370,8 +370,104 @@ getActivity()方法来得到和当前碎片相关联的活动实例
 putBoolean 方法,添加一个字符串则使用 putString()方法,以此类推。
 3. 调用 commit()方法将添加的数据提交,从而完成数据存储操作。
 
+**创建内容提供器**
 
+1. onCreate()
 
+    初始化内容提供器的时候调用。通常会在这里完成对数据库的创建和升级等操作,
+    返回 true 表示内容提供器初始化成功,返回 false 则表示失败。注意,只有当存在
+    ContentResolver 尝试访问我们程序中的数据时,内容提供器才会被初始化。
+
+2. query()
+
+    从内容提供器中查询数据。使用 uri 参数来确定查询哪张表,projection 参数用于确
+    定查询哪些列,selection 和 selectionArgs 参数用于约束查询哪些行,sortOrder 参数用于
+    对结果进行排序,查询的结果存放在 Cursor 对象中返回。
+
+3. insert()
+
+    向内容提供器中添加一条数据。使用 uri 参数来确定要添加到的表,待添加的数据
+    保存在 values 参数中。添加完成后,返回一个用于表示这条新记录的 URI。
+
+4. update()
+
+    更新内容提供器中已有的数据。使用 uri 参数来确定更新哪一张表中的数据,新数
+    据保存在 values 参数中,selection 和 selectionArgs 参数用于约束更新哪些行,受影响的
+    行数将作为返回值返回。
+
+5. delete()
+
+    从内容提供器中删除数据。使用 uri 参数来确定删除哪一张表中的数据,selection
+    和 selectionArgs 参数用于约束删除哪些行,被删除的行数将作为返回值返回。
+
+6. getType()
+
+    根据传入的内容 URI 来返回相应的 MIME 类型。
+
+**Android异步消息处理机制**
+
+Android中的异步消息处理主要由四个部分组成，Message, Handler, MessageQueue
+和Looper。
+
+1. Message 
+    
+    Message是在线程指奸传递的消息，它可以在内部携带少量的信息，用于在不同
+    线程之间交换数据。
+
+2. Handler
+
+    Handler就是处理者的意思，它主要用来发送和处理消息。发送消息一般是使用
+    Handler的sendMessage()方法，而发送出去的消息经过一系列的辗转处理，
+    最终会被传递到Handler的handleMessage()方法中。
+
+3. MessageQueue
+
+    MessageQueue式消息队列的意思，它主要用于存放所有通过Handler发送的消息
+
+4. Looper
+
+    Looper是每个线程中的MessageQueue的管家，调用Looper的loop()方法后，
+    就会进入到一个无限循环中，每当它发现MessageQueue中存在一条消息后，
+    就将它取出来，并传递到Handler的handlerMessage()方法中。
+
+**AsyncTask**
+
+借助 AsyncTask,即使你对异步消息处理机制完全不了解,
+也可以十分简单地从子线程切换到主线程。当然,AsyncTask 
+背后的实现原理也是基于异步
+消息处理机制的,只是 Android 帮我们做了很好的封装而已
+
+一个简单的自定义AsyncTask就可以写成如下方式：
+
+    class DownloadTask extends AsyncTask<Void, Integer, Boolean> {
+    .......
+    }
+
+经常需要去重写的方法有一下四个：
+
+1. onPreExecute()
+    
+    这个方法在后台任务开始执行之前调用。
+
+2. doInBackground(Parmas...)
+
+    这个方法中的所有代码都会在子线程中运行,我们应该在这里去处理所有的耗时任
+    务。任务一旦完成就可以通过 return 语句来将任务的执行结果返回,如果 AsyncTask 的
+    第三个泛型参数指定的是 Void,就可以不返回任务执行结果。注意,在这个方法中是不
+    可以进行 UI 操作的,如果需要更新 UI 元素,比如说反馈当前任务的执行进度,可以调
+    用 publishProgress(Progress...)方法来完成。
+
+3. onProgressUpdate(Progress...)
+
+    当在后台任务中调用了 publishProgress(Progress...)方法后,这个方法就会很快被调
+    用,方法中携带的参数就是在后台任务中传递过来的。在这个方法中可以对 UI 进行操
+    作,利用参数中的数值就可以对界面元素进行相应地更新。
+
+4. onPostExecute(Result)
+
+    当后台任务执行完毕并通过 return 语句进行返回时,这个方法就很快会被调用。返
+    回的数据会作为参数传递到此方法中,可以利用返回的数据来进行一些 UI 操作,比如
+    说提醒任务执行的结果,以及关闭掉进度条对话框等。
 
 ![控件和布局的继承结构](../images/view&viewgroup.png)
 
