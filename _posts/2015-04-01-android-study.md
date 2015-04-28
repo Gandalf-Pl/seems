@@ -469,5 +469,10 @@ Android中的异步消息处理主要由四个部分组成，Message, Handler, M
     回的数据会作为参数传递到此方法中,可以利用返回的数据来进行一些 UI 操作,比如
     说提醒任务执行的结果,以及关闭掉进度条对话框等。
 
+怎么禁止EditText编辑:
+
+    1: 设置android:editable=”false” android:focusable=”false”
+    2: EditText.setFocusable(false) EditText.setFocusableInTouchMode(true)
+
 ![控件和布局的继承结构](../images/view&viewgroup.png)
 
