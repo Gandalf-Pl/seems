@@ -99,3 +99,13 @@ Django的MiddleWare
         @parameters exception Exception
         @return None or HttpResponse
         ”””
+
+*Django ORM Complex Query*
+
+    django ORM Query:
+
+        Userpoint.objects.values(“user”).annotate(user_count=Count(‘user’)).filter(user_count__gt=1).query
+
+    Conver to SQL:
+
+        SELECT “userpoint_userpoint”.”user_id”, COUNT(“userpoint_userpoint”.”user_id”) AS “user_count” FROM “userpoint_userpoint” GROUP BY “userpoint_userpoint”.”user_id” HAVING COUNT(“userpoint_userpoint”.”user_id”) > 1
