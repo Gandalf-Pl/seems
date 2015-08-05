@@ -22,4 +22,7 @@ if __name__ == "__main__":
     for i in xrange(5):
         p = multiprocessing.Process(target=incr_key_in_redis)
         p.start()
-
+        # To wait until a process has completed its work and exited,
+        # use the join() method. 如果不使用join,其他进程不会等待它结束
+        # join可以传递参数,指定它的timeout时间
+        p.join()
