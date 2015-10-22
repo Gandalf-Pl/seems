@@ -119,15 +119,12 @@ Activity的生存期
     部的控件就不能将高度指定为match_parent。
 
     关键属性的用法：
-    
     + android:layout_gravity
     
         用于指定控件在布局中的对齐方式。
-
     + android:gravity
     
         用于指定文字在控件中的对齐方式。
-
     + android:layout_weight
     
         这个属性允许我们使用比例的方式来指定控件的大小，它在手机屏幕的
@@ -141,32 +138,24 @@ Activity的生存期
     让控件出现在布局的任何位置。
 
     关键属性的用法：
-    
     + android:layout_above 
     
         让一个控件在另一个控件的上方。需要为这个属性指定相对控件id
         的引用。
-
     + android:layout_below
     
         表示让控件位与另一个控件的下方。
-
     + android:layout_toLeftOf
     
         表示让一个控件位与另一个控件的左侧。
-
     + android:layout_toRightOf
     
         表示让一个控件位于另一个控件的右侧
-
     + android:layout_alignLeft
     
         表示控件让另一个控件的左边缘和另一个控件的左边缘对齐。
-
     + android:layout_alignRight
-
     + android:layout_alignTop
-
     + android:layout_alignBottom
 
 3. FrameLayout
@@ -181,24 +170,6 @@ Activity的生存期
     
     表示如果表格不能完全占满屏幕宽度，就将第二行进行拉伸。这里指定成
     1就是拉伸第二列，0拉伸第一列，类推。
-
-**控件和布局的继承结构**
-
-一些其他的属性：
-
-    + android:background 
-
-        用于为布局或控件指定一个背景，可以使用颜色或图片来进行填充。
-
-    + android:layout_margin
-        
-        这个属性，它可以指定控件在上下左右方向上偏移的距离.
-
-    + android:layout_marginLeft
-        
-    + android:layout_marginTop
-
-        这几个属性可以用来单独指定控件在某个方向上的偏移的距离。
 
 通过include可以非常方便的引用一个布局，同时解决了重复编写布局代码的问
 题，但是如果布局中有一些控件要求能够响应时间，我们还是需要在每个活动
