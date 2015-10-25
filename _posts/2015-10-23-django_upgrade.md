@@ -23,6 +23,17 @@ title: Django升级到1.8.5
 
 + django内置模块
 
-    + transaction.commit_manuay
+    + transaction.commit_manuay, 可以重新写一个decorator
+
+        ~~~python
+        def commit_manually(fn):
+            def _commit_manually(*args, **kwargs):
+                set_autocommit(False)
+                res = fn(*args, **kwargs)
+                commit()
+                set_autocommit(True)
+                return res
+            return _commit_manually
+        ~~~
 
     + 
