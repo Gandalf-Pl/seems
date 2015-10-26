@@ -1,10 +1,9 @@
 ---
-layou: post
-rd argument ‘mimetype’
+layout: post
 title: django升级到1.8.5
 ---
 
-### {{ page.title }}
+###{{ page.title }}
 
 <href=https://docs.djangoproject.com/en/1.8/releases/>
 
