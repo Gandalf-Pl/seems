@@ -5,9 +5,10 @@ title: django升级到1.8.5
 
 ###{{ page.title }}
 
-<href=https://docs.djangoproject.com/en/1.8/releases/>
+相关改动详情可查看:
 
-<href=https://openedx.atlassian.net/wiki/display/tnl/django+1.8+test+plan>
+[django](https://docs.djangoproject.com/en/1.8/releases/)
+[django_upgrade](https://openedx.atlassian.net/wiki/display/tnl/django+1.8+test+plan)
 
 + manage.py   需要修改 1.4.22 ==> 1.8.5 
 
@@ -66,7 +67,7 @@ title: django升级到1.8.5
 
     + django1.8中已经修改的模块
 
-        - error1(importerror: no module named defaults):
+        - Error1(importerror: no module named defaults):
 
             ~~~python
             from django.conf.urls.defaults import patterns, url, include
@@ -77,7 +78,7 @@ title: django升级到1.8.5
             from django.conf.urls import patterns, url, include
             ~~~
 
-        - error2(no module named simple):
+        - Error2(no module named simple):
 
             ~~~python
             from django.views.generic.simple import redirect_to, direct_to_template
@@ -88,7 +89,7 @@ title: django升级到1.8.5
             pass
             ~~~
             
-        - error3(cannot import name email_re)
+        - Error3(cannot import name email_re)
             
             django的validators中的email_re已经删除了,需要自己定义
             
@@ -106,7 +107,7 @@ title: django升级到1.8.5
                 r’|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]\z’, re.ignorecase) 
             ~~~
 
-        - error4(cannot import simplejson)
+        - Error4(cannot import simplejson)
 
             ~~~python
             from django.utils import simplejson
@@ -123,4 +124,5 @@ title: django升级到1.8.5
 
         - Error6(Invalid block tag: ‘set’, expected ‘endblock’)
 
-            maybe is django_jinjia error
+            django8中内置了对jinja2模板的引擎,可以使用django_jinja模块来直接使用jinja2引擎
+            
