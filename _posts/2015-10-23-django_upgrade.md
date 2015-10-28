@@ -26,19 +26,32 @@ title: django升级到1.8.5
 
     + add [django-jinja==1.4.1] in installed_apps
 
+    + [django-tinymce 1.5.3 ==> 2.0.5]
+
+    + [django-appconf 0.6 ==> 1.0.1]
+
+    + [wfgfw 0.0.6]
+
 + django内置模块
 
     + transaction.commit_manuay, 可以重新写一个decorator
 
         ~~~python
-        def commit_manually(fn):
-            def _commit_manually(*args, **kwargs):
-                set_autocommit(false)
-                res = fn(*args, **kwargs)
-                commit()
-                set_autocommit(true)
+        def commit_manually(func):
+            """
+            构造一个手动提交的事务的函数
+            :param func:
+            :return:
+            """
+
+            @functools.wraps(func)
+            def _inner(*args, **kwargs):
+                set_autocommit(False)
+                res = func(*args, **kwargs)
+                set_autocommit(True)
                 return res
-            return _commit_manually
+
+            return _inner
         ~~~
 
     + transaction.commit_on_success ==> transaction.atomic
@@ -126,3 +139,30 @@ title: django升级到1.8.5
 
             django8中内置了对jinja2模板的引擎,可以使用django_jinja模块来直接使用jinja2引擎
             
+        - Error7(‘User’ object has no attribute ‘customer_set’)
+
+            在django1.8中,request.user.customer_set的写法已经不行
+
+        - Error8(field is Foreignkey and is unique)
+            
+            Foreignkey(unique=True) ==> OneToOneField 
+            同时需要修改对应的module的对象的调用方式
+
+        - Error9(NoReverseMatch: Reverse for ‘’ with arguments ‘()’ and keyword arguments ‘{}’ not found. 0 pattern(s) tried: [])
+
+            在django1.4中,模板中可以使用{% url reverse_name %}, 但是在django1.8中需要将reverse_name 用引号扩起来.
+
++ Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
+
+    流程如下[upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
+        +_首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
+
+        + 将”south”模块从INSTALLED_APPS中删除
+
+        + 删除掉你的所有的migration文件，但是不要删除文件夹和__init__.py文件,同时需要保证删除你的.pyc文件
+
+        + 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
+
+        + 执行python manage.py migrate --fake-inital.
+
+            todo
