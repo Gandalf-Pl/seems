@@ -71,6 +71,74 @@ title: django升级到1.8.5
     + django的template重新设计了,需要更新django的template.
 
         详细文档参见[django template](https://docs.djangoproject.com/en/1.8/ref/templates/upgrading/)
+        在settings红配置相应的模板信息 
+        
+        ~~~python
+        TEMPLATE_LOADERS = [
+            (
+                'django.template.loaders.cached.Loader',
+                (
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                )
+            ),
+        ]
+        
+        TEMPLATES = [
+            {
+                "BACKEND": "django_jinja.backend.Jinja2",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    # 以jinja2结尾的相应的模板引用Jinja2引擎
+                    "match_extension": ".jinja2",
+                    "extensions": DEFAULT_EXTENSIONS + [
+                        "jinja2.ext.do",
+                        "jinja2.ext.loopcontrols",
+                        "jinja2.ext.with_",
+                        "jinja2.ext.autoescape",
+                        "django_jinja.builtins.extensions.CsrfExtension",
+                        "django_jinja.builtins.extensions.CacheExtension",
+                        "django_jinja.builtins.extensions.TimezoneExtension",
+                        "django_jinja.builtins.extensions.UrlsExtension",
+                        "django_jinja.builtins.extensions.StaticFilesExtension",
+                        "django_jinja.builtins.extensions.DjangoFiltersExtension",
+                        "compressor.contrib.jinja2ext.CompressorExtension",
+                    ],
+                    "context_processors": [
+                        "django.contrib.auth.context_processors.auth",
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.i18n",
+                        "django.template.context_processors.media",
+                        "django.template.context_processors.static",
+                        "django.template.context_processors.tz",
+                        "django.contrib.messages.context_processors.messages",
+                    ],
+                    "autoescape": True,
+                }
+            },
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [
+                    os.path.join(_DIRNAME, "templates"),
+                    os.path.join(_DIRNAME, "..")
+                ],
+                # When APP_DIRS is True, DjangoTemplates engines look for templates
+                # in the templates subdirectory of installed applications.
+                'APP_DIRS': True,
+                'OPTIONS': {
+                    'context_processors': [
+                        'django.contrib.auth.context_processors.auth',
+                        'django.template.context_processors.debug',
+                        'django.template.context_processors.i18n',
+                        'django.template.context_processors.media',
+                        'django.template.context_processors.static',
+                        'django.template.context_processors.tz',
+                        'django.contrib.messages.context_processors.messages',
+                    ],
+                },
+            },
+        ]
+        ~~~
 
     + django1.8在启动的时候添加了对form, model的检测
 
@@ -150,19 +218,18 @@ title: django升级到1.8.5
 
         - Error9(NoReverseMatch: Reverse for ‘’ with arguments ‘()’ and keyword arguments ‘{}’ not found. 0 pattern(s) tried: [])
 
-            在django1.4中,模板中可以使用{% url reverse_name %}, 但是在django1.8中需要将reverse_name 用引号扩起来.
+            在django1.4中,模板中可以使用url reverse_name, 此处的reverse_name可以不用引号扩起来,
+            但是在django1.8中需要将reverse_name 用引号扩起来.
 
-+ Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
+    + Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
 
-    流程如下[upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
-        +_首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
-
-        + 将”south”模块从INSTALLED_APPS中删除
-
-        + 删除掉你的所有的migration文件，但是不要删除文件夹和__init__.py文件,同时需要保证删除你的.pyc文件
-
-        + 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
-
-        + 执行python manage.py migrate --fake-inital.
-
-            todo
+        流程可以参考官方文档: [upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
+        1. 首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
+        2. 将”south”模块从INSTALLED_APPS中删除
+        3. 删除掉你的所有的migration文件，但是不要删除文件夹和__init__.py文件,同时需要保证删除你的.pyc文件
+        4. 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
+        5. 执行python manage.py migrate --fake-inital. **需要注意的是,如果migrate有对其他外部的引用,
+           则可能会产生多个migrate文件,此时直接执行该命令会报错,需要对有多个文件的app单独执行命令
+           python manage.py migrate --fake yourapp**
+           
+        执行完上述命令后,在数据库中可以看到,django会新生成一张表django_migrate来取代老的south_migrationhistory表,其中的数据是重新开始的migrate的记录.
