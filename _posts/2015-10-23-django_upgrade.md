@@ -74,16 +74,6 @@ title: django升级到1.8.5
         在settings红配置相应的模板信息 
         
         ~~~python
-        TEMPLATE_LOADERS = [
-            (
-                'django.template.loaders.cached.Loader',
-                (
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                )
-            ),
-        ]
-        
         TEMPLATES = [
             {
                 "BACKEND": "django_jinja.backend.Jinja2",
@@ -220,6 +210,14 @@ title: django升级到1.8.5
 
             在django1.4中,模板中可以使用url reverse_name, 此处的reverse_name可以不用引号扩起来,
             但是在django1.8中需要将reverse_name 用引号扩起来.
+
+        - Error10(select_related())
+
+            在django1.8中,select_related中对应的值必须是该model中存在的,否则就会有异常抛出,而在之前的版本中，则是可以是不存在的属性的
+
+        - Error11(get_query_set ==> get_queryset)
+
+            在django1.6中就已经修改get_query_set == > get_queryset了,在Manager中和Admin中对应的查询都需要修改为get_queryset
 
     + Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
 
