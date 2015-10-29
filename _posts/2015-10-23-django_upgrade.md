@@ -233,3 +233,20 @@ title: django升级到1.8.5
            python manage.py migrate --fake yourapp**
            
         执行完上述命令后,在数据库中可以看到,django会新生成一张表django_migrate来取代老的south_migrationhistory表,其中的数据是重新开始的migrate的记录.
+
+    + Django Warnings 
+
+        升级到django1.8.5之后，在启动检查的过程中会有一些警告产生, 通过命令**python -W “error:django.utils.importlib:DeprecationWarning” manage.py runserver**
+        可以看到traceback信息
+        - Warning1(django.utils.importlib wi be removed in Django 1.9)
+
+            upgrade django-appconf from version 0.6.6 to 1.0.1 will solve this warning
+        - Warning2(ngo.contrib.contenttypes.generic is deprecated and wi be removed in Django 1.9)
+
+            Its contents have been moved to the fields, forms, and admin submodules of django.contrib.contenttypes.
+        - Warning3(The django.db.backends.util module has been renamed)
+
+            Use django.db.backends.utils instead.
+        - Warning4(Redirectview.permanent will change from True to False in Django1.9) 
+
+             Set an explicit value to silence this warning, buf after I upgrade django-appconf to 1.0.1, this warning disappear
