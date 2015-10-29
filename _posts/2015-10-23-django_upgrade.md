@@ -226,7 +226,7 @@ title: django升级到1.8.5
         流程可以参考官方文档: [upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
         1. 首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
         2. 将”south”模块从INSTALLED_APPS中删除
-        3. 删除掉你的所有的migration文件，但是不要删除文件夹和__init__.py文件,同时需要保证删除你的.pyc文件
+        3. 删除掉你的所有的migration文件，但是不要删除文件夹和\_\_init\_\_.py文件,同时需要保证删除你的.pyc文件
         4. 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
         5. 执行python manage.py migrate --fake-inital. **需要注意的是,如果migrate有对其他外部的引用,
            则可能会产生多个migrate文件,此时直接执行该命令会报错,需要对有多个文件的app单独执行命令
