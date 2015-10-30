@@ -12,25 +12,22 @@ title: django升级到1.8.5
 
 + manage.py   需要修改 1.4.22 ==> 1.8.5 
 
-+ settings.installed_apps需要修改 [django.contrib.markup]
++ settings INSTALLED_APPS需要更新的第三方包
 
-+ django工具包修改 from django.utils import simplejson  ==> import simplejson 直接修改为内置
+    - Upgrade
+        1. [django-nose 1.2 ==>1.4.2]
+        2. [django-extensions 1.4.6 ==> 1.5.7]
+        3. [coffin 0.3.8 ==> 2.0.1]
+        4. [django-tinymce 1.5.3 ==> 2.0.5]
+        5. [django-appconf 0.6 ==> 1.0.1]
+        6. [wfgfw 0.0.6]
+        7. [django-compressor 1.4 ==> 1.5]
 
-+ 需要升级的第三方包
+    - Add
+        1. [django-jinja==1.4.1]
 
-    + [django-nose 1.2 ==>1.4.2]
-
-    + [django-extensions 1.4.6 ==> 1.5.7]
-
-    + [coffin 0.3.8 ==> 2.0.1]
-
-    + add [django-jinja==1.4.1] in installed_apps
-
-    + [django-tinymce 1.5.3 ==> 2.0.5]
-
-    + [django-appconf 0.6 ==> 1.0.1]
-
-    + [wfgfw 0.0.6]
+    - Delete
+        1. [django.contrib.markup]
 
 + django内置模块
 
@@ -48,6 +45,7 @@ title: django升级到1.8.5
             def _inner(*args, **kwargs):
                 set_autocommit(False)
                 res = func(*args, **kwargs)
+                commit()
                 set_autocommit(True)
                 return res
 
@@ -114,7 +112,7 @@ title: django升级到1.8.5
                 ],
                 # When APP_DIRS is True, DjangoTemplates engines look for templates
                 # in the templates subdirectory of installed applications.
-                'APP_DIRS': True,
+                # 'APP_DIRS': True,
                 'OPTIONS': {
                     'context_processors': [
                         'django.contrib.auth.context_processors.auth',
@@ -124,6 +122,12 @@ title: django升级到1.8.5
                         'django.template.context_processors.static',
                         'django.template.context_processors.tz',
                         'django.contrib.messages.context_processors.messages',
+                    ],
+                    'loaders': [
+                                    ('django.template.loaders.cached.Loader', [
+                                        'django.template.loaders.filesystem.Loader',
+                                        'django.template.loaders.app_directories.Loader',
+                                    ]),
                     ],
                 },
             },
@@ -137,8 +141,7 @@ title: django升级到1.8.5
         - foreignkey: unique=true has same effect as using onetoonefield(remove unique=true if unique is set true in foreignkey field)
 
     + django1.8中已经修改的模块
-
-        - Error1(importerror: no module named defaults):
+        1. Error1(importerror: no module named defaults):
 
             ~~~python
             from django.conf.urls.defaults import patterns, url, include
@@ -148,19 +151,13 @@ title: django升级到1.8.5
             ~~~python
             from django.conf.urls import patterns, url, include
             ~~~
-
-        - Error2(no module named simple):
+        2. Error2(no module named simple):
 
             ~~~python
             from django.views.generic.simple import redirect_to, direct_to_template
             ~~~
             ==>
-
-            ~~~python
-            pass
-            ~~~
-            
-        - Error3(cannot import name email_re)
+        3. Error3(cannot import name email_re)
             
             django的validators中的email_re已经删除了,需要自己定义
             
@@ -177,8 +174,7 @@ title: django升级到1.8.5
                 r’)@((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,6}\.?\z)’  # domain
                 r’|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]\z’, re.ignorecase) 
             ~~~
-
-        - Error4(cannot import simplejson)
+        4. Error4(cannot import simplejson)
 
             ~~~python
             from django.utils import simplejson
@@ -188,63 +184,64 @@ title: django升级到1.8.5
             ~~~python
             import simplejson
             ~~~
-
-        - Error5(got an unexpected keyword argument ‘mimetype’)
+        5. Error5(got an unexpected keyword argument ‘mimetype’)
             
             mimetype=”application/json” ==> content_type=”application/json”
-
-        - Error6(Invalid block tag: ‘set’, expected ‘endblock’)
+        6. Error6(Invalid block tag: ‘set’, expected ‘endblock’)
 
             django8中内置了对jinja2模板的引擎,可以使用django_jinja模块来直接使用jinja2引擎
-            
-        - Error7(‘User’ object has no attribute ‘customer_set’)
+        7. Error7(‘User’ object has no attribute ‘customer_set’)
 
             在django1.8中,request.user.customer_set的写法已经不行
-
-        - Error8(field is Foreignkey and is unique)
+        8. Error8(field is Foreignkey and is unique)
             
             Foreignkey(unique=True) ==> OneToOneField 
             同时需要修改对应的module的对象的调用方式
-
-        - Error9(NoReverseMatch: Reverse for ‘’ with arguments ‘()’ and keyword arguments ‘{}’ not found. 0 pattern(s) tried: [])
+        9. Error9(NoReverseMatch: Reverse for ‘’ with arguments ‘()’ and keyword arguments ‘{}’ not found. 0 pattern(s) tried: [])
 
             在django1.4中,模板中可以使用url reverse_name, 此处的reverse_name可以不用引号扩起来,
             但是在django1.8中需要将reverse_name 用引号扩起来.
-
-        - Error10(select_related())
+        10. Error10(select_related())
 
             在django1.8中,select_related中对应的值必须是该model中存在的,否则就会有异常抛出,而在之前的版本中，则是可以是不存在的属性的
-
-        - Error11(get_query_set ==> get_queryset)
+        11. Error11(get_query_set ==> get_queryset)
 
             在django1.6中就已经修改get_query_set == > get_queryset了,在Manager中和Admin中对应的查询都需要修改为get_queryset
 
-    + Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
++ Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
 
-        流程可以参考官方文档: [upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
-        1. 首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
-        2. 将”south”模块从INSTALLED_APPS中删除
-        3. 删除掉你的所有的migration文件，但是不要删除文件夹和\_\_init\_\_.py文件,同时需要保证删除你的.pyc文件
-        4. 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
-        5. 执行python manage.py migrate --fake-inital. **需要注意的是,如果migrate有对其他外部的引用,
-           则可能会产生多个migrate文件,此时直接执行该命令会报错,需要对有多个文件的app单独执行命令
-           python manage.py migrate --fake yourapp**
-           
-        执行完上述命令后,在数据库中可以看到,django会新生成一张表django_migrate来取代老的south_migrationhistory表,其中的数据是重新开始的migrate的记录.
+    流程可以参考官方文档: [upgrading from south](https://docs.djangoproject.com/en/1.8/topics/migrations/#upgrading-from-south):
+    1. 首先需要确保当前的模块的migrate都是正确的，文件和model都是相同的
+    2. 将”south”模块从INSTALLED_APPS中删除
+    3. 删除掉你的所有的migration文件，但是不要删除文件夹和\_\_init\_\_.py文件,同时需要保证删除你的.pyc文件
+    4. 然后执行python manage.py makemigrations. Django会找到migration文件目录，然后创建新的初始化migrations
+    5. 执行python manage.py migrate --fake-inital. **需要注意的是,如果migrate有对其他外部的引用,
+       则可能会产生多个migrate文件,此时直接执行该命令会报错,需要对有多个文件的app单独执行命令
+       python manage.py migrate --fake yourapp**
+       
+    执行完上述命令后,在数据库中可以看到,django会新生成一张表django_migrate来取代老的south_migrationhistory表,其中的数据是重新开始的migrate的记录.
 
-    + Django Warnings 
++ Django Warnings 
 
-        升级到django1.8.5之后，在启动检查的过程中会有一些警告产生, 通过命令**python -W “error:django.utils.importlib:DeprecationWarning” manage.py runserver**
-        可以看到traceback信息
-        - Warning1(django.utils.importlib wi be removed in Django 1.9)
+    升级到django1.8.5之后，在启动检查的过程中会有一些警告产生, 通过命令**python -W “error:django.utils.importlib:DeprecationWarning” manage.py runserver**
+    可以看到traceback信息
+    - Warning1(django.utils.importlib will be removed in Django 1.9)
 
-            upgrade django-appconf from version 0.6.6 to 1.0.1 will solve this warning
-        - Warning2(ngo.contrib.contenttypes.generic is deprecated and wi be removed in Django 1.9)
+        upgrade django-appconf from version 0.6.6 to 1.0.1 
 
-            Its contents have been moved to the fields, forms, and admin submodules of django.contrib.contenttypes.
-        - Warning3(The django.db.backends.util module has been renamed)
+        upgrade django-compressor-1.4 ==> django-compressor-1.5
 
-            Use django.db.backends.utils instead.
-        - Warning4(Redirectview.permanent will change from True to False in Django1.9) 
+        from django.utils.importlib import import_module ==> from importlib import import_module
+    - Warning2(ngo.contrib.contenttypes.generic is deprecated and wi be removed in Django 1.9)
 
-             Set an explicit value to silence this warning, buf after I upgrade django-appconf to 1.0.1, this warning disappear
+        Its contents have been moved to the fields, forms, and admin submodules of django.contrib.contenttypes.
+    - Warning3(The django.db.backends.util module has been renamed)
+
+        Use django.db.backends.utils instead.
+    - Warning4(Redirectview.permanent will change from True to False in Django1.9) 
+
+        ~~~
+        url(r’^$’, RedirectView.as_view(url=’your_url’))
+        # modify to
+        url(r’^$’, RedirectView.as_view(url=’your_url’, permanent=True))
+        ~~~
