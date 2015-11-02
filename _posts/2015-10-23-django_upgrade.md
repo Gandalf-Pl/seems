@@ -63,7 +63,7 @@ title: django升级到1.8.5
             class meta:
                 model = user
                 # 此处必须要要加上对应的fileds 或者exclude
-                fields = “__all__”
+                fields = "__all__"
         ~~~
 
     + django的template重新设计了,需要更新django的template.
@@ -168,11 +168,11 @@ title: django升级到1.8.5
 
             ~~~python
             email_re = re.compile(
-                r”(^[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+(\.[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+)*”  # dot-atom
+                r"(^[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+(\.[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+)*"  # dot-atom
                 # quoted-string, see also http://tools.ietf.org/html/rfc2822#section-3.2.5
-                r’|^”([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016-\177])*”’
-                r’)@((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,6}\.?\z)’  # domain
-                r’|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]\z’, re.ignorecase) 
+                r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016-\177])*"'
+                r')@((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,6}\.?\z)'  # domain
+                r'|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]\z', re.ignorecase) 
             ~~~
         4. Error4(cannot import simplejson)
 
@@ -244,8 +244,8 @@ title: django升级到1.8.5
         Use django.db.backends.utils instead.
     - Warning4(Redirectview.permanent will change from True to False in Django1.9) 
 
-        ~~~
-        url(r’^$’, RedirectView.as_view(url=’your_url’))
+        ~~~python
+        url(r'^$', RedirectView.as_view(url='your_url'))
         # modify to
-        url(r’^$’, RedirectView.as_view(url=’your_url’, permanent=True))
+        url(r'^$', RedirectView.as_view(url='your_url', permanent=True))
         ~~~
