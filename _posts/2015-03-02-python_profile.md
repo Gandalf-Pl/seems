@@ -10,35 +10,38 @@ title: Python性能相关的Tips
    而insert的时间复杂度是O(len(list)),也就是O(n).
    
    *code example:*
-    
-    
-    # coding: utf8
-    import time
-    
-    num = 5**10
-    
-    
-    def test_append():
-        x1 = time.time()
-        list1 = list()
-        for x in xrange(num):
-            list1.append(x)
-            
-        list1.reverse()
-        print "append cost time is %s " % (time.time() - x1)
+
+~~~python
+# coding: utf8
+import time
+
+num = 5**10
+
+
+def test_append():
+    x1 = time.time()
+    list1 = list()
+    for x in xrange(num):
+        list1.append(x)
         
-        
-    def test_insert():
-        x2 = time.time()
-        list2 = list()
-        for x in xrange(num):
-            list2.insert(0, x)
-        print "insert cost time is %s " % (time.time() - x2)
-        
-    test_append()
-    test_insert()
+    list1.reverse()
+    print "append cost time is %s " % (time.time() - x1)
+    
+    
+def test_insert():
+    x2 = time.time()
+    list2 = list()
+    for x in xrange(num):
+        list2.insert(0, x)
+    print "insert cost time is %s " % (time.time() - x2)
+    
+test_append()
+test_insert()
+~~~
     
     
 ### Floating point computation is by nature inexact 
 
-    >>> sum(0.1 for i in xrange(10)) == 1.0  # False
+~~~python
+>>> sum(0.1 for i in xrange(10)) == 1.0  # False
+~~~
