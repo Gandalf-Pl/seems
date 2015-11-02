@@ -7,9 +7,9 @@ import xlsxwriter
 connection = psycopg2.connect(
     host='192.168.1.4',
     port='5432',
-    user='***',
-    password="****",
-    database='*****'
+    user='',
+    password="",
+    database=''
 )
 
 def get_shanghai_restaurant_data():
@@ -113,5 +113,46 @@ def export_report():
     wb.close()
     print "export over"
 
+
+def export_shanghai_frozen_restaurant():
+    """"""
+    raw_sql = """
+    SELECT restaurant_restaurant.id, restaurant_restaurant.name_zh, restaurant_restaurant.status
+    FROM restaurant_restaurant
+    INNER JOIN restaurant_cityarea ON restaurant_cityarea.id = restaurant_restaurant.city_area_id
+    INNER JOIN restaurant_city ON restaurant_city.id = restaurant_cityarea.city_id
+    WHERE restaurant_city.name_zh = '上海' and restaurant_restaurant.status = 0 order by id;
+    """
+
+    cursor = connection.cursor()
+    cursor.execute(raw_sql)
+
+    restaurant_data = cursor.fetchall()
+    cursor.close()
+    frozen_list = list()
+    for item in restaurant_data:
+        frozen_list.append([item[0], item[1].decode("utf8"), item[2]])
+    export_excel("冻结餐厅", headers=("餐厅id", "餐厅名称", "状态"), data=frozen_list)
+
+
+def export_excel(sheet_name, headers, data):
+    """
+    sheet_name 表头名称
+    data 数据，格式是和表头对应的list
+    """
+    wb = xlsxwriter.Workbook("/home/panlei/export.xlsx")
+    xls_sheet = wb.add_worksheet(sheet_name)
+    for num, column in enumerate(headers):
+        xls_sheet.write(0, num, column)
+    for row, item in enumerate(data):
+        col = 0
+        row += 1
+        for d in item:
+            xls_sheet.write(row, col, d)
+            col += 1
+    wb.close()
+    print "export file ok"
+
+
 if __name__ == "__main__":
-    export_report()
+    export_shanghai_frozen_restaurant()

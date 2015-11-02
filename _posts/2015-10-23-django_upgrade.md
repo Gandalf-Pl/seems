@@ -12,7 +12,7 @@ title: django升级到1.8.5
 
 + manage.py   需要修改 1.4.22 ==> 1.8.5 
 
-+ settings INSTALLED_APPS需要更新的第三方包
++ INSTALLED_APPS需要更新的第三方包
 
     - Upgrade
         1. [django-nose 1.2 ==>1.4.2]
@@ -207,6 +207,10 @@ title: django升级到1.8.5
         11. Error11(get_query_set ==> get_queryset)
 
             在django1.6中就已经修改get_query_set == > get_queryset了,在Manager中和Admin中对应的查询都需要修改为get_queryset
+
+    + settings.ALLOWED__HOSTS
+        
+        需要在新的版本中添加的配置,在DEBUT=False的时候,django允许访问的hosts,是一个列表信息
 
 + Django1.8 south模块内置到django中,需要修改之前的migrate文件,使之能后在新的版本继续使用    
 
