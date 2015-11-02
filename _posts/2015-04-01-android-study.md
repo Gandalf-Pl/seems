@@ -211,9 +211,11 @@ Android中的单位和尺寸
 为了方便碎片和活动之间进行通信，FragmentManager提供了一个类似于
 findViewById()的方法专门用于从布局文件中获取碎片的实例。
 
-*example code:*
+*example code*
 
-    RightFragment RightFragment = (Rightfragment) getFragmentManger().findFragmentById(R.id.right_fragment);
+~~~java
+RightFragment RightFragment = (Rightfragment) getFragmentManger().findFragmentById(R.id.right_fragment);
+~~~
 
 通过调用FragmentManager的findFragmentById()方法，可以在活动中得到相应
 碎片的实例，然后就能轻松的调用碎片李宓的方法。
@@ -223,7 +225,9 @@ getActivity()方法来得到和当前碎片相关联的活动实例
 
 *example code:*
 
-    MainActivity activity = (MainActivity) getActivity();
+~~~java
+MainActivity activity = (MainActivity) getActivity();
+~~~
 
 有了活动实例之后，在碎片中调用活动里的方法就变得轻而易举。另外当碎片中
 需要使用Context对象的时候，也可以使用getActivity()方法，因为获取到
@@ -410,9 +414,11 @@ Android中的异步消息处理主要由四个部分组成，Message, Handler, M
 
 一个简单的自定义AsyncTask就可以写成如下方式：
 
-    class DownloadTask extends AsyncTask<Void, Integer, Boolean> {
-    .......
-    }
+~~~java
+class DownloadTask extends AsyncTask<Void, Integer, Boolean> {
+.......
+}
+~~~
 
 经常需要去重写的方法有一下四个：
 
