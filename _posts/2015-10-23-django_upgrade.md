@@ -66,10 +66,10 @@ title: django升级到1.8.5
                 fields = "__all__"
         ~~~
 
-    + django的template重新设计了,需要更新django的template.
+    + django的template重新设计了,需要更新django的template,在django1.8中默认支持两种模板引擎,DjangoTemplates, Jinja2 Template.
 
         详细文档参见[django template](https://docs.djangoproject.com/en/1.8/ref/templates/upgrading/)
-        在settings红配置相应的模板信息 
+        在settings中配置相应的模板信息 
         
         ~~~python
         TEMPLATES = [
@@ -145,28 +145,26 @@ title: django升级到1.8.5
 
             ~~~python
             from django.conf.urls.defaults import patterns, url, include
-            ~~~
-            ==>
-
-            ~~~python
+            # 修改为
             from django.conf.urls import patterns, url, include
             ~~~
         2. Error2(no module named simple):
 
             ~~~python
+            # 在1.8中已经废弃
             from django.views.generic.simple import redirect_to, direct_to_template
+            ('^about/$', direct_to_template, {'template': 'about.html'})
+            # replace with generic classes
+            from django.views.generic.base import TemplateView, RedirectView
+            ('^about/$', TemplateView.as_view('template': 'about.html'})
             ~~~
-            ==>
         3. Error3(cannot import name email_re)
             
             django的validators中的email_re已经删除了,需要自己定义
             
             ~~~python
             from django.core.validators import email_re
-            ~~~
-            ==>
-
-            ~~~python
+            # 在django1.8中可以自己实线email_re
             email_re = re.compile(
                 r"(^[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+(\.[-!#$%&‘*+/=?^_`{}|~0-9a-z`]+)*"  # dot-atom
                 # quoted-string, see also http://tools.ietf.org/html/rfc2822#section-3.2.5
@@ -178,26 +176,23 @@ title: django升级到1.8.5
 
             ~~~python
             from django.utils import simplejson
-            ~~~
-            ==>
-
-            ~~~python
+            # 在django1.8中直接使用标准库中的simplejson或者json来代替django.utils中的simplejson
             import simplejson
             ~~~
-        5. Error5(got an unexpected keyword argument ‘mimetype’)
+        5. Error5(got an unexpected keyword argument 'mimetype')
             
-            mimetype=”application/json” ==> content_type=”application/json”
-        6. Error6(Invalid block tag: ‘set’, expected ‘endblock’)
+            mimetype="application/json" ==> content_type="application/json"
+        6. Error6(Invalid block tag: 'set', expected 'endblock')
 
             django8中内置了对jinja2模板的引擎,可以使用django_jinja模块来直接使用jinja2引擎
-        7. Error7(‘User’ object has no attribute ‘customer_set’)
+        7. Error7('User' object has no attribute 'customer_set')
 
             在django1.8中,request.user.customer_set的写法已经不行
         8. Error8(field is Foreignkey and is unique)
             
             Foreignkey(unique=True) ==> OneToOneField 
             同时需要修改对应的module的对象的调用方式
-        9. Error9(NoReverseMatch: Reverse for ‘’ with arguments ‘()’ and keyword arguments ‘{}’ not found. 0 pattern(s) tried: [])
+        9. Error9(NoReverseMatch: Reverse for '' with arguments '()' and keyword arguments '{}' not found. 0 pattern(s) tried: [])
 
             在django1.4中,模板中可以使用url reverse_name, 此处的reverse_name可以不用引号扩起来,
             但是在django1.8中需要将reverse_name 用引号扩起来.
