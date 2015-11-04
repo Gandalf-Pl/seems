@@ -14,15 +14,18 @@ title: 自动生成证书并发送给用户
 
 import datetime
 import os
-from email.Header import Header
-from email.MIMEText import MIMEText
-from email.MIMEBase import MIMEBase
-from email.MIMEMultipart import MIMEMultipart
 import smtplib
 import mimetypes
-from email.MIMEAudio import MIMEAudio
-from email.MIMEImage import MIMEImage
-from email.Encoders import encode_base64
+import threading
+
+from email.header import Header
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
+from email.mime.base import MIMEBase
+from email.mime.audio import MIMEAudio
+
+from email.encoders import encode_base64
 
 
 def get_expired_users(filename):
@@ -64,7 +67,8 @@ def auto_create_crt(filename):
         if '@test.com' in username:
             username = username.split('@')[0]
         create_crt_for_user(username)
-        auto_send_mail(username)
+        t = SendMail(username)
+        t.start()
 
 
 def create_crt_for_user(username):
@@ -75,48 +79,17 @@ def create_crt_for_user(username):
     """
     try:
         os.system("openssl genrsa 1024 > %s.key" % username)
-        os.system("openssl req -new -key %s.key -out %s.csr -subj "
-                  "'/C=cn/ST=shanghai/O=***/OU=test/CN=%s/emailAddress=%s@***.com'" %
+        os.system("openssl req -new -key %s.key -out %s.csr "
+                  "-subj '/C=cn/ST=shanghai/O=***/OU=test/CN=%s/emailAddress"
+                  "=%s@***.com'" %
                   (username, username, username,'****'))
-        os.system('openssl ca -key *** -in %s.csr -out %s.crt -batch'%(username, username))
-        os.system('openssl pkcs12 -export -clcerts -in %s.crt -inkey %s.key -out %s.pfx -passout pass:' %
+        os.system('openssl ca -key *** -in %s.csr -out %s.crt -batch'
+                  % (username, username))
+        os.system('openssl pkcs12 -export -clcerts -in '
+                  '%s.crt -inkey %s.key -out %s.pfx -passout pass:' %
                   (username, username, username))
     except Exception as e:
         print "create crt error, error msg is {}".format(e)
-
-
-def auto_send_mail(username):
-    """
-    自动为重新生成证书的用户发送邮件,此处应该开启线程来发送邮件。
-　　"""
-    # 创建一个带附件的实例
-    msg = MIMEMultipart()
-    server = smtplib.SMTP('smtp.163.com')
-    server.login("username", 'password')
-    try:
-        # 构造附件
-        crt_name = username+'.pfx'
-        att = MIMEText("您好，你的证书已经过期，请在三天内下载附件中的证书，并重新安装，"
-                       "否则过期后将无法登陆系统。",'base64', 'utf8')
-        msg.attach(att)
-        msg.attach(get_attachment("/etc/pki/tls/date/user/{}".format(crt_name)))
-
-        msg['to'] = username+'@test.com'
-        msg['Cc'] = '****@****.com'
-        msg['from'] = '****@***.com'
-        msg['subject'] = Header('证书 (' + str(datetime.date.today()) + ')', 'utf8')
-
-        # 发送邮件
-        server.sendmail(msg['from'], msg['to'], msg.as_string())
-    except Exception as e:
-        print "send mail error, error msg is {}".format(e)
-        att = MIMEText("发送邮件出错！！！",'base64', 'utf8')
-        msg.attach(att)
-        msg['to'] = '***@****.com'
-        msg['Cc'] = '****@***.com'
-        msg['from'] = '****@***.com'
-        msg['subject'] = Header('证书 (' + str(datetime.date.today()) + ')', 'utf8')
-    server.close()
 
 
 def get_attachment(file_path):
@@ -138,8 +111,50 @@ def get_attachment(file_path):
         attachment.set_payload(f.read())
         encode_base64(attachment)
 
-    attachment.add_header('Content-Disposition', 'attachment',   filename=os.path.basename(file_path))
+    attachment.add_header(
+        'Content-Disposition',
+        'attachment',
+        filename=os.path.basename(file_path))
     return attachment
+
+
+class SendMail(threading.Thread):
+    """
+    发送邮件的线程
+    """
+    def __init__(self, username):
+        super(SendMail, self).__init__()
+        self.username = username
+
+    def run(self):
+        # 创建一个带附件的实例
+        msg = MIMEMultipart()
+        server = smtplib.SMTP('smtp.163.com')
+        server.login("username", 'password')
+        try:
+            # 构造附件
+            crt_name = self.username+'.pfx'
+            att = MIMEText("您好，你的证书已经过期，请在三天内下载附件中的证书，并重新安装，"
+                           "否则过期后将无法登陆系统。",'base64', 'utf8')
+            msg.attach(att)
+            msg.attach(get_attachment("/etc/pki/tls/date/user/{}".format(crt_name)))
+
+            msg['to'] = self.username+'@test.com'
+            msg['Cc'] = '****@****.com'
+            msg['from'] = '****@***.com'
+            msg['subject'] = Header('证书 (' + str(datetime.date.today()) + ')', 'utf8')
+
+            # 发送邮件
+            server.sendmail(msg['from'], msg['to'], msg.as_string())
+        except Exception as e:
+            print "send mail error, error msg is {}".format(e)
+            att = MIMEText("发送邮件出错！！！",'base64', 'utf8')
+            msg.attach(att)
+            msg['to'] = '***@****.com'
+            msg['Cc'] = '****@***.com'
+            msg['from'] = '****@***.com'
+            msg['subject'] = Header('证书 (' + str(datetime.date.today()) + ')', 'utf8')
+        server.close()
 
 if __name__ == '__main__':
     file_name = '/etc/pki/CA/index.txt'
