@@ -27,8 +27,8 @@ title: 编写Dockerfile
         通过转义字符\可以将${variable_name}或者$variable_name转义为普通的字符串  
 
         在dockerfile中接受环境变量的指令有:  
-          + ENV  
-          + ADD  
+          + ENV
+          + ADD
           + COPY
           + WORKDIR
           + EXPOSE
