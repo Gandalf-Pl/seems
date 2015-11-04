@@ -13,7 +13,24 @@ title: 编写Dockerfile
 
         ~~~python
         # Comment
-        RUN echo ‘we are running some # of cool things’
+        RUN echo 'we are running some # of cool things'
         ~~~
 
-+ 
++ Dockerfile中设置环境变量
+
+    - ENV 关键字来设置环境变量,在dockerfile中可以${variable_name}或者$variable_name来
+      引用变量.同时${variable_name}支持部分*bash*的语法
+
+        - ${variable:-word}表示如果variable已经设置,则结果就是设置的值,否则结果就是word
+        - ${variable:+word}表示如果variable已经设置,则结果就是word,否则就是空的字符串
+
+        通过转义字符\可以将${variable_name}或者$variable_name转义为普通的字符串  
+
+        在dockerfile中接受环境变量的指令有:  
+          + ENV  
+          + ADD  
+          + COPY
+          + WORKDIR
+          + EXPOSE
+          + VOLUME
+          + USER

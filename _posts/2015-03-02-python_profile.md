@@ -45,3 +45,7 @@ test_insert()
 ~~~python
 >>> sum(0.1 for i in xrange(10)) == 1.0  # False
 ~~~
+
+
+### Python GIL
+[python GLI](http://www.dabeaz.com/python/GIL.pdf)
