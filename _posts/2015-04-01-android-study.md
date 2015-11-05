@@ -451,5 +451,6 @@ class DownloadTask extends AsyncTask<Void, Integer, Boolean> {
     1: 设置android:editable=”false” android:focusable=”false”
     2: EditText.setFocusable(false) EditText.setFocusableInTouchMode(true)
 
-![控件和布局的继承结构](../images/view&viewgroup.png)
+空间和布局的继承结果图如下:
+![控件和布局的继承结构](http://7xikwp.com1.z0.glb.clouddn.com/seemsview.png)
 
