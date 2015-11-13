@@ -244,3 +244,7 @@ title: django升级到1.8.5
         # modify to
         url(r'^$', RedirectView.as_view(url='your_url', permanent=True))
         ~~~
+
++ Django Session
+
+    在django1.4中,session的默认序列化格式是”django.contrib.sessions.serializers.PickleSerializer”,但是在django1.6之后，出于安全考虑修改为”JSONSerializer”
