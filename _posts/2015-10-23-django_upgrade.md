@@ -1,6 +1,6 @@
 ---
 layout: post
-title: django升级到1.8.5
+title: django升级到1.8.6
 ---
 
 ###{{ page.title }}
@@ -10,7 +10,7 @@ title: django升级到1.8.5
 [django](https://docs.djangoproject.com/en/1.8/releases/)
 [django_upgrade](https://openedx.atlassian.net/wiki/display/tnl/django+1.8+test+plan)
 
-+ manage.py   需要修改 1.4.22 ==> 1.8.5 
++ manage.py   需要修改 1.4.22 ==> 1.8.6 
 
 + INSTALLED_APPS需要更新的第三方包
 
@@ -222,7 +222,7 @@ title: django升级到1.8.5
 
 + Django Warnings 
 
-    升级到django1.8.5之后，在启动检查的过程中会有一些警告产生, 通过命令**python -W “error:django.utils.importlib:DeprecationWarning” manage.py runserver**
+    升级到django1.8.6之后，在启动检查的过程中会有一些警告产生, 通过命令**python -W “error:django.utils.importlib:DeprecationWarning” manage.py runserver**
     可以看到traceback信息
     - Warning1(django.utils.importlib will be removed in Django 1.9)
 
@@ -247,4 +247,4 @@ title: django升级到1.8.5
 
 + Django Session
 
-    在django1.4中,session的默认序列化格式是”django.contrib.sessions.serializers.PickleSerializer”,但是在django1.6之后，出于安全考虑修改为”JSONSerializer”
+    在django1.4中,session的默认序列化格式是"django.contrib.sessions.serializers.PickleSerializer",但是在django1.6之后，出于安全考虑修改为"JSONSerializer"
