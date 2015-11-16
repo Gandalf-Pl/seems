@@ -248,3 +248,10 @@ title: django升级到1.8.6
 + Django Session
 
     在django1.4中,session的默认序列化格式是"django.contrib.sessions.serializers.PickleSerializer",但是在django1.6之后，出于安全考虑修改为"JSONSerializer"
+
++ Django Form提交
+    
+    request.POST will no longer include data posted via HTTP requests with non form-specific content-types in the header. 
+    In prior versions, data posted with content-types other than multipart/form-data or 
+    application/x-www-form-urlencoded would still end up represented in the request.POST attribute. 
+    Developers wishing to access the raw POST data for these cases, should use the request.body attribute instead.
