@@ -140,6 +140,21 @@ title: django升级到1.8.6
 
         - foreignkey: unique=true has same effect as using onetoonefield(remove unique=true if unique is set true in foreignkey field)
 
+    + App-loading changes
+
+        - Standalone scripts¶
+
+            If you’re using Django in a plain Python script — rather than a management command — 
+            and you rely on the DJANGO_SETTINGS_MODULE environment variable, you must now explicitly 
+            initialize Django at the beginning of your script with:
+            
+            ~~~python
+            >>> import django
+            >>> django.setup()
+            ~~~
+
+            Otherwise, you will hit an AppRegistryNotReady exception.
+
     + django1.8中已经修改的模块
         1. Error1(importerror: no module named defaults):
 
