@@ -32,6 +32,6 @@ title: Ubuntu和vim中设置sdcv
    在vimrc(位于 ~/.vimrc 或者 /etc/vim/vimrc)中加入
    
        ~~~
-       nmap <C-k> : !sdcv <C-R>=expand("<cword>")<CR><CR></CR>
+       nmap <C-k> : !sdcv <C-R>=expand("<cword>")<CR><CR>
        ~~~
    然后在vim的普通模式下面Control-k就可以查看当前单词的字典信息
