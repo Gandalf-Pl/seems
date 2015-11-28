@@ -28,11 +28,10 @@ title: Ubuntu和vim中设置sdcv
     sdcv word
     ~~~
 
-+ 在vim中调用sdcv信息
-
-   在vimrc(位于 ~/.vimrc 或者 /etc/vim/vimrc)中加入 
-
-   ~~~
-   nmap <C-k> : !sdcv <C-R>=expand(“<cword>”)<CR><CR></CR></CR></cword>) 
-   ~~~
-   然后在vim的普通模式下面Ctrol-k就可以查看当前单词的字典信息
++ 在vim中调用sdcv信息  
+   在vimrc(位于 ~/.vimrc 或者 /etc/vim/vimrc)中加入
+   
+       ~~~
+       nmap <C-k> : !sdcv <C-R>=expand("<cword>")<CR><CR></CR>
+       ~~~
+   然后在vim的普通模式下面Control-k就可以查看当前单词的字典信息

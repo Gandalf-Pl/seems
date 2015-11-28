@@ -217,7 +217,6 @@ title: django升级到1.8.6
         11. Error11(get_query_set ==> get_queryset)
 
             在django1.6中就已经修改get_query_set == > get_queryset了,在Manager中和Admin中对应的查询都需要修改为get_queryset
-
         12. Error12(F(**fileds)|() ==> F(**fileds).bitor())
 
             在django1.5中，在F中不在使用|或者&，改为使用bitor和bitand
