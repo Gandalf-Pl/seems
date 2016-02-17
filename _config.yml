@@ -28,11 +28,11 @@ permalink: /:year/:month/:title
 paginate: 2
 
 # highlighter: pygments
-highlighter: rouge
 markdown: kramdown
 kramdown:
     input: GFM
     hard_wrap: false
+    syntax_highlighter: rouge
 
 # markdown: redcarpet
 # redcarpet:
