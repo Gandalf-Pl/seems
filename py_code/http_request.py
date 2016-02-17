@@ -31,13 +31,15 @@ class StringProducer(object):
 
 def httpRequest(url, values={}, headers={}, method='POST'):
     # Construct an Agent.
-    agent = Agent(reactor)
+    agent = Agent(reactor, connectTimeout=3)
     data = urllib.urlencode(values)
 
     d = agent.request(method,
                       url,
                       Headers(headers),
                       StringProducer(data) if data else None)
+
+    reactor.callLater(5, d.cancel)
 
     def handle_response(response):
         if response.code == 204:
@@ -58,7 +60,13 @@ def httpRequest(url, values={}, headers={}, method='POST'):
             response.deliverBody(SimpleReceiver(d))
         return d
 
+    def handle_errors(failure):
+        print("request timeout")
+        # 在此处可以根据对应的failure进行不同的操作
+        print failure
+
     d.addCallback(handle_response)
+    d.addErrback(handle_errors)
     return d
 
 # Sample usage:
