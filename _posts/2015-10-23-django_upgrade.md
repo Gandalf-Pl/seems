@@ -3,7 +3,7 @@ layout: post
 title: django升级到1.8.6
 ---
 
-###{{ page.title }}
+### {{ page.title }}
 
 相关改动详情可查看:
 
