@@ -1,4 +1,4 @@
-URL: http://gandalf-pl.github.io/seems/
+URL: http://seems.tech
 
 **简介:**
 
