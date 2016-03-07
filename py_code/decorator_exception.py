@@ -16,8 +16,6 @@ def test_decorator(func):
     return _inner
 
 
-
-
 def test_catch_exception_decorator(func):
     """
     test catch exception in decorator
@@ -27,10 +25,11 @@ def test_catch_exception_decorator(func):
     def _inner(*args, **kwargs):
         try:
             res = func(*args, **kwargs)
+            print "args is {}".format(*args)
             return res
         except Exception as e:
             print e.message
-            raise e
+            # raise e
 
     return _inner
 
@@ -46,15 +45,13 @@ def test_normal():
     """"""
     return "ok"
 
+
 @test_catch_exception_decorator
-def test_catch_exception():
+def test_catch_exception(*args):
     raise Exception("test raise error in function")
 
 
 if __name__ == "__main__":
     print test_normal()
-    try:
-        print test_catch_exception()
-    except Exception as e:
-        print e.message
-    print test_raise_exception()
+    print test_catch_exception('test1', "test2")
+    # print test_raise_exception()
