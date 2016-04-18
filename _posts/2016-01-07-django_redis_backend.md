@@ -27,7 +27,7 @@ title: 设置django的Cache为Redis
 
     - 首先需要安装django-redis,根据django版本安装不同的版本,本例中django1.8.7
 
-      ~~~ python
+      ~~~ bash
       pip install django-redis==4.3.0
       ~~~
 
