@@ -37,7 +37,7 @@ VC的拦截器实现该功能.本篇讲述使用spring的AOP来实现.
     
         private static final Logger logger = Logger.getLogger(SystemLogAspect.class);
     
-        @Pointcut("@annotation(me.ele.michelangelo.annotation.SystemControllerLog)")
+        @Pointcut("@annotation(tech.seems.annotation.SystemControllerLog)")
         public void controllerAspect(){
         }
     
