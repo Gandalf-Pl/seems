@@ -65,22 +65,9 @@ VC的拦截器实现该功能.本篇讲述使用spring的AOP来实现.
          * @throws Exception
          */
         public  static String getControllerMethodDescription(JoinPoint joinPoint)  throws Exception {
-            String targetName = joinPoint.getTarget().getClass().getName();
-            String methodName = joinPoint.getSignature().getName();
-            Object[] arguments = joinPoint.getArgs();
-            Class targetClass = Class.forName(targetName);
-            Method[] methods = targetClass.getMethods();
-            String description = "";
-            for (Method method : methods) {
-                if (method.getName().equals(methodName)) {
-                    Class[] clazzs = method.getParameterTypes();
-                    if (clazzs.length == arguments.length) {
-                        description = method.getAnnotation(SystemControllerLog. class).description();
-                        break;
-                    }
-                }
-            }
-            return description;
+            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+            Method method = signature.getMethod();
+            return method.getAnnotation(SystemControllerLog.class).description();
         }
     }
     {% endhighlight %}
