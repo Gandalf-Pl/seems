@@ -1,16 +1,16 @@
 ---
 layout: post
-title: 设置django的Cache为Redis
+title: 配置Redis作为Django的默认缓存服务
 ---
 
-### {{ page.title }}
+#### {{ page.title }}
 
-+ 在Django目前的版本中支持了多种的cache backend
+**目前Django中支持的cache backend**
 
-    - Memcached
-    - Database caching
-    - Filesystem caching
-    - local-memory caching
+    Memcached
+    Database caching
+    Filesystem caching
+    local-memory caching
 
     在这些cache之外,你可以自己定制自己的cache后端.
 
