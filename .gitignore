@@ -5,3 +5,5 @@ _site/
 *.md~
 *.jekyll-metadata
 *.ipynb
+
+MNIST_data/
