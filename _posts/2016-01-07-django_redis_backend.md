@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 配置Redis作为Django的默认缓存服务
+tags: [Python, Django]
+comments: true
 ---
 
 #### {{ page.title }}
