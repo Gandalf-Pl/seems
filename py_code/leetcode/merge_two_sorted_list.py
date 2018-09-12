@@ -28,7 +28,7 @@ def merge_two_lists(l1, l2):
         curr = curr.next
     curr.next = l1 or l2
 
-    return dummy
+    return dummy.next
 
 if __name__ == "__main__":
 
