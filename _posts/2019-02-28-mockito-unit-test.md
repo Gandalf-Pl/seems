@@ -22,9 +22,9 @@ title: 使用PowerMock编写单元测试
 
 ### 如何通过PowerMock进行单元测试的编写
 
-    example:
-    需要进行单元测试的类
-    ~~~
+    例如我们需要进行单元测试的类:
+
+    ~~~ java
     @Service
     public class A {
 
@@ -49,8 +49,8 @@ title: 使用PowerMock编写单元测试
     @InjectMocks 用来注解需要测试的类。
     @Mock 用来注解需要测试的类中依赖的其他类。
 
-    ~~~
 
+    ~~~ java
     @RunWith(PowerMockRunner.class)
     public class ATest{
 
@@ -81,35 +81,37 @@ title: 使用PowerMock编写单元测试
     在上面的单元测试中，我们使用spy来对要测试的数据进行Mock，表示的是找个测试类中，有些方法我们需要mock，有些我们需要测试。如果不在setup中对A进行spy，在测试中我们就无法进行对私有方法的mock。
 
     上述在setup进行的操作也可以通过注解进行，但是需要注意注解的顺序,这样mockito就会先进行mock，然后进行spy
+
+
     ~~~
     @RunWith(PowerMockRunner.class)
     public class ATest {
 
-    @InjectMocks
-    @spy
-    private A a;
+        @InjectMocks
+        @spy
+        private A a;
 
-    @Mock
-    private B b;
-
+        @Mock
+        private B b;
 
     ......
-
     }
-
     ~~~
 
     当我们遇到如下需要测试的场景的时候，需要在测试类上加PrepareForTest注解。
 
-    - 当需要mock final方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是final方法所在的类。
-    - 当需要mock静态方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是静态方法所在的类。
-    - 当需要mock私有方法的时候, 需要加注解@PrepareForTest，注解里写的类是私有方法所在的类。测试类自己的私有方法可以不需要在这个注解中加。
-    - 当需要mock系统类的静态方法的时候，必须加注解@PrepareForTest。注解里写的类是需要调用系统方法所在的类。
+    1. 当需要mock final方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是final方法所在的类。
+    2. 当需要mock静态方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是静态方法所在的类。
+    3. 当需要mock私有方法的时候, 需要加注解@PrepareForTest，注解里写的类是私有方法所在的类。测试类自己的私有方法可以不需要在这个注解中加。
+    4. 当需要mock系统类的静态方法的时候，必须加注解@PrepareForTest。注解里写的类是需要调用系统方法所在的类。
 
     具体的使用姿势如下:
+
+
     ~~~
     @RunWith(PowerMockRunner.class)
     @PrepareForTest({B.class, C.class})
     public class ATest {
+    }
     ~~~
 
