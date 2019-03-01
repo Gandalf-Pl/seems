@@ -43,4 +43,4 @@ exclude: ['README.md', 'LICENSE']
 gems :
   - jekyll-paginate
 
-theme: jekyll-theme-hacker
+    #theme: jekyll-theme-hacker

@@ -22,9 +22,13 @@ title: 使用PowerMock编写单元测试
 
 ### 如何通过PowerMock进行单元测试的编写
 
-    例如我们需要进行单元测试的类:
++ 例如我们需要进行单元测试的类:
 
-    ~~~ java
+    ~~~ python
+    print("hello")
+    ~~~
+
+    ``` java
     @Service
     public class A {
 
@@ -41,7 +45,7 @@ title: 使用PowerMock编写单元测试
             return this.privateMethod(var);
         }
     }
-    ~~~
+    ```
 
     编写单元测试的时候，我们需要对A类进行测试，执行其中的public方法,同时需要mock掉对应的私有方法。
 
@@ -83,7 +87,7 @@ title: 使用PowerMock编写单元测试
     上述在setup进行的操作也可以通过注解进行，但是需要注意注解的顺序,这样mockito就会先进行mock，然后进行spy
 
 
-    ~~~
+    ~~~ java
     @RunWith(PowerMockRunner.class)
     public class ATest {
 
@@ -94,11 +98,11 @@ title: 使用PowerMock编写单元测试
         @Mock
         private B b;
 
-    ......
+        ......
     }
     ~~~
 
-    当我们遇到如下需要测试的场景的时候，需要在测试类上加PrepareForTest注解。
+   当我们遇到如下需要测试的场景的时候，需要在测试类上加PrepareForTest注解。
 
     1. 当需要mock final方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是final方法所在的类。
     2. 当需要mock静态方法的时候，必须加注解@PrepareForTest。注解@PrepareForTest里写的类是静态方法所在的类。
@@ -107,8 +111,7 @@ title: 使用PowerMock编写单元测试
 
     具体的使用姿势如下:
 
-
-    ~~~
+    ~~~ java
     @RunWith(PowerMockRunner.class)
     @PrepareForTest({B.class, C.class})
     public class ATest {
