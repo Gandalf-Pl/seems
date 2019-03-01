@@ -24,10 +24,6 @@ title: 使用PowerMock编写单元测试
 
 + 例如我们需要进行单元测试的类:
 
-    ~~~ python
-    print("hello")
-    ~~~
-
     ``` java
     @Service
     public class A {
